@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>体重管理</title>
+<style>
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;background:#fff8fb;color:#1f2940}
+.app{max-width:520px;margin:auto;min-height:100vh;background:white;padding-bottom:84px}
+header{text-align:center;font-size:22px;font-weight:800;padding:20px 16px 14px;border-bottom:1px solid #f1f1f4}
+main{padding:18px}.card{background:#fff2f6;border-radius:20px;padding:18px;margin-bottom:18px}
+.label{color:#7b8599;font-size:14px;font-weight:700}.goal{font-size:36px;font-weight:800;margin-top:6px}
+.center{text-align:center;padding:24px 0}.big{font-size:64px;font-weight:800;margin:16px 0}
+.controls{display:flex;justify-content:center;align-items:center;gap:30px}
+.btn{width:72px;height:72px;border-radius:50%;border:none;background:#ffdce7;color:#ff5f8d;font-size:40px}
+.small{color:#7b8599;font-size:13px}.delta{text-align:center}.delta b{color:#ff5f8d;font-size:28px}
+.bottom{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(520px,100%);display:grid;grid-template-columns:repeat(4,1fr);background:white;border-top:1px solid #ececf1;padding:8px 0 calc(8px + env(safe-area-inset-bottom))}
+.nav{border:none;background:none;font-size:12px;color:#7b8599;padding:6px}.nav.active{color:#ff5f8d;font-weight:800}.ico{display:block;font-size:22px}
+.hidden{display:none}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}.tab{border:0;border-radius:10px;padding:10px;background:#f1f3f7;color:#68748c;font-weight:700}.tab.active{background:#ff5f8d;color:white}
+.row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #eee}.row:last-child{border-bottom:0}
+.editBtn{border:none;background:none;color:#ff5f8d;font-size:18px}.section-title{font-size:22px;font-weight:800;margin-bottom:14px}
+.setting{display:flex;justify-content:space-between;align-items:center;padding:15px 0;border-bottom:1px solid #eee}.setting:last-child{border-bottom:0}
+.sbtn{width:40px;height:40px;border:none;border-radius:50%;background:#ffdce7;color:#ff5f8d;font-size:24px}
+input{width:100px;font-size:22px;padding:8px;text-align:center;border:1px solid #ddd;border-radius:10px}
+.save,.danger{width:100%;padding:14px;border-radius:12px;font-size:16px;font-weight:800;margin-top:12px}.save{border:none;background:#ff5f8d;color:white}.danger{background:white;color:#ef3c65;border:1px solid #ef3c65}
+svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:white}
+</style>
+</head>
+<body>
+<div class="app">
+<header id="headerTitle">体重管理</header>
+<main>
+<section id="home">
+  <div class="card">
+    <div class="label">目標体重</div>
+    <div class="goal"><span id="goalHome">58.0</span> kg</div>
+  </div>
+
+  <div class="center">
+    <div class="small" id="dateText"></div>
+    <div class="big"><span id="weightHome">62.4</span><span style="font-size:24px"> kg</span></div>
+    <div class="controls">
+      <button id="minusBtn" class="btn">−</button>
+      <div class="small"><div>0.1kgずつ変更</div><div id="saveText">変更すると自動保存</div></div>
+      <button id="plusBtn" class="btn">＋</button>
+    </div>
+  </div>
+
+  <div class="card delta">
+    <div class="label">目標まで</div>
+    <b id="deltaText"></b>
+  </div>
+</section>
+
+<section id="graph" class="hidden">
+  <div class="tabs">
+    <button class="tab active" data-days="7">1週間</button>
+    <button class="tab" data-days="30">1か月</button>
+    <button class="tab" data-days="365">1年</button>
+  </div>
+  <svg id="chart" viewBox="0 0 360 260"></svg>
+</section>
+
+<section id="history" class="hidden">
+  <div class="section-title">記録の編集</div>
+  <div class="card" id="historyList"></div>
+</section>
+
+<section id="settings" class="hidden">
+  <div class="section-title">設定</div>
+  <div class="card">
+    <div class="setting">
+      <span>目標体重</span>
+      <div>
+        <button id="goalMinus" class="sbtn">−</button>
+        <strong style="margin:0 10px"><span id="goalSettings">58.0</span> kg</strong>
+        <button id="goalPlus" class="sbtn">＋</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="edit" class="hidden">
+  <div class="section-title">体重の編集</div>
+  <div class="card">
+    <div class="small" id="editDate"></div>
+    <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0">
+      <button id="editMinus" class="sbtn">−</button>
+      <input id="editWeight" type="number" step="0.1">
+      <button id="editPlus" class="sbtn">＋</button>
+    </div>
+    <button id="saveEdit" class="save">保存</button>
+    <button id="deleteEdit" class="danger">この記録を削除</button>
+  </div>
+</section>
+</main>
+
+<nav class="bottom">
+  <button class="nav active" data-page="home"><span class="ico">⌂</span>ホーム</button>
+  <button class="nav" data-page="graph"><span class="ico">▥</span>グラフ</button>
+  <button class="nav" data-page="history"><span class="ico">▤</span>記録</button>
+  <button class="nav" data-page="settings"><span class="ico">⚙︎</span>設定</button>
+</nav>
+</div>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const KEY = 'weightAppData_v2';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const pad=n=>String(n).padStart(2,'0');
+  const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const todayKey=keyOf(today);
+
+  function makeSeed(){
+    const records={};
+    const values=[63.4,63.0,62.8,62.6,62.3,62.1,62.4];
+    for(let i=6;i>=0;i--){
+      const d=new Date(today); d.setDate(d.getDate()-i);
+      records[keyOf(d)] = values[6-i];
+    }
+    return {goal:58.0,records};
+  }
+
+  let data;
+  try { data = JSON.parse(localStorage.getItem(KEY)) || makeSeed(); }
+  catch(e){ data = makeSeed(); }
+  if(data.records[todayKey] == null) data.records[todayKey] = 62.4;
+
+  let currentRange = 7;
+  let editingKey = null;
+
+  function save(){
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
+  }
+
+  function currentWeight(){ return Number(data.records[todayKey] ?? 62.4); }
+
+  function renderHome(){
+    $('weightHome').textContent = currentWeight().toFixed(1);
+    $('goalHome').textContent = Number(data.goal).toFixed(1);
+    $('goalSettings').textContent = Number(data.goal).toFixed(1);
+    $('dateText').textContent = `${today.getFullYear()}年${today.getMonth()+1}月${today.getDate()}日`;
+    const diff = currentWeight() - data.goal;
+    $('deltaText').textContent = diff > 0 ? `あと ${diff.toFixed(1)} kg` : diff < 0 ? `目標より ${Math.abs(diff).toFixed(1)} kg 少ない` : '目標達成';
+  }
+
+  function changeToday(step){
+    const next = Math.round((currentWeight()+step)*10)/10;
+    data.records[todayKey] = Math.max(20, Math.min(300, next));
+    save();
+    renderHome();
+    renderHistory();
+    renderChart();
+    $('saveText').textContent='保存しました';
+    setTimeout(()=>{$('saveText').textContent='変更すると自動保存';},800);
+  }
+
+  function changeGoal(step){
+    data.goal = Math.max(20,Math.min(300,Math.round((Number(data.goal)+step)*10)/10));
+    save(); renderHome(); renderChart();
+  }
+
+  function showPage(page){
+    ['home','graph','history','settings','edit'].forEach(id=>$(id).classList.toggle('hidden',id!==page));
+    document.querySelectorAll('.nav').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===page));
+    $('headerTitle').textContent = page==='graph'?'グラフ':page==='history'?'記録':page==='settings'?'設定':page==='edit'?'体重の編集':'体重管理';
+    if(page==='history') renderHistory();
+    if(page==='graph') renderChart();
+  }
+
+  function renderHistory(){
+    const keys=Object.keys(data.records).sort().reverse();
+    $('historyList').innerHTML = keys.map(k=>{
+      const d=new Date(k+'T00:00:00');
+      return `<div class="row"><span>${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日</span><span><strong>${Number(data.records[k]).toFixed(1)} kg</strong> <button class="editBtn" data-edit="${k}">›</button></span></div>`;
+    }).join('');
+    document.querySelectorAll('[data-edit]').forEach(btn=>{
+      btn.addEventListener('click',()=>openEdit(btn.dataset.edit));
+    });
+  }
+
+  function openEdit(k){
+    editingKey=k;
+    const d=new Date(k+'T00:00:00');
+    $('editDate').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
+    $('editWeight').value=Number(data.records[k]).toFixed(1);
+    showPage('edit');
+  }
+
+  function adjustEdit(step){
+    $('editWeight').value=(Math.round((Number($('editWeight').value||0)+step)*10)/10).toFixed(1);
+  }
+
+  function saveEdit(){
+    if(!editingKey) return;
+    data.records[editingKey]=Math.round(Number($('editWeight').value)*10)/10;
+    save(); renderHome(); showPage('history');
+  }
+
+  function deleteEdit(){
+    if(!editingKey) return;
+    if(confirm('この記録を削除しますか？')){
+      delete data.records[editingKey];
+      if(editingKey===todayKey) data.records[todayKey]=62.4;
+      save(); renderHome(); showPage('history');
+    }
+  }
+
+  function renderChart(){
+    const svg=$('chart');
+    const cutoff=new Date(today); cutoff.setDate(cutoff.getDate()-(currentRange-1));
+    const pts=Object.entries(data.records).map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)})).filter(x=>x.d>=cutoff).sort((a,b)=>a.d-b.d);
+    if(!pts.length){svg.innerHTML='<text x="180" y="130" text-anchor="middle">記録がありません</text>';return;}
+    const W=360,H=260,L=42,R=16,T=20,B=36;
+    const vals=pts.map(p=>p.v).concat([Number(data.goal)]);
+    let min=Math.floor(Math.min(...vals)-1), max=Math.ceil(Math.max(...vals)+1);
+    if(max-min<4) max=min+4;
+    const x=i=>L+(W-L-R)*(pts.length===1?0.5:i/(pts.length-1));
+    const y=v=>T+(H-T-B)*(max-v)/(max-min);
+    let out='';
+    for(let n=min;n<=max;n++){const yy=y(n);out+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#eef1f5"/><text x="${L-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="#8892a5">${n}</text>`;}
+    const gy=y(Number(data.goal));
+    out+=`<line x1="${L}" x2="${W-R}" y1="${gy}" y2="${gy}" stroke="#ff5f8d" stroke-dasharray="6 5"/><text x="${W-R}" y="${gy-6}" text-anchor="end" font-size="11" fill="#ff5f8d">目標 ${Number(data.goal).toFixed(1)}</text>`;
+    out+=`<path d="${pts.map((p,i)=>`${i?'L':'M'} ${x(i)} ${y(p.v)}`).join(' ')}" fill="none" stroke="#ff6b94" stroke-width="3"/>`;
+    pts.forEach((p,i)=>out+=`<circle cx="${x(i)}" cy="${y(p.v)}" r="4" fill="#ff6b94"/>`);
+    svg.innerHTML=out;
+  }
+
+  $('minusBtn').addEventListener('click',()=>changeToday(-0.1));
+  $('plusBtn').addEventListener('click',()=>changeToday(0.1));
+  $('goalMinus').addEventListener('click',()=>changeGoal(-0.1));
+  $('goalPlus').addEventListener('click',()=>changeGoal(0.1));
+  $('editMinus').addEventListener('click',()=>adjustEdit(-0.1));
+  $('editPlus').addEventListener('click',()=>adjustEdit(0.1));
+  $('saveEdit').addEventListener('click',saveEdit);
+  $('deleteEdit').addEventListener('click',deleteEdit);
+  document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page)));
+  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
+    currentRange=Number(btn.dataset.days);
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));
+    renderChart();
+  }));
+
+  save(); renderHome(); renderHistory(); renderChart();
+})();
+</script>
+</body>
+</html>
