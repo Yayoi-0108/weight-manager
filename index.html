@@ -261,7 +261,7 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
       return;
     }
     const bmi=weight/Math.pow(height/100,2);
-    const rating=bmi<18.5?'低体重':bmi<25?'普通体重':bmi<30?'肥満（1度）':bmi<35?'肥満（2度）':bmi<40?'肥満（3度）':'肥満（4度）';
+    const rating=bmi<18.5?'やせ':bmi<25?'普通':'肥満';
     $('bmiValue').textContent=bmi.toFixed(1);
     $('bmiRating').className='bmi-rating';
     $('bmiRating').textContent=rating;
