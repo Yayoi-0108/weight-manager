@@ -1,0 +1,22 @@
+{
+  "name": "体重管理",
+  "short_name": "体重管理",
+  "description": "毎日の体重を記録して、目標までの変化を確認するアプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fff8fb",
+  "theme_color": "#ff6b94",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
