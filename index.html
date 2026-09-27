@@ -40,7 +40,7 @@ input{width:100px;font-size:22px;padding:8px;text-align:center;border:1px solid 
 select{font-size:16px;padding:9px 12px;border:1px solid #ddd;border-radius:10px;background:white;color:#1f2940}
 .date-picker{width:auto;font-size:15px;color:#68748c;background:#fff;border:1px solid #e5e7ed;padding:8px 12px}
 .save,.secondary,.danger{width:100%;padding:14px;border-radius:12px;font-size:16px;font-weight:800;margin-top:12px}.save{border:none;background:#ff5f8d;color:white}.secondary{background:white;color:#ff5f8d;border:1px solid #ff9fba}.danger{background:white;color:#ef3c65;border:1px solid #ef3c65}
-svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:white}
+svg{width:100%;height:440px;border:1px solid #eee;border-radius:16px;background:white}
 </style>
 </head>
 <body>
@@ -52,7 +52,6 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
     <div class="label">目標体重</div>
     <div class="goal"><span id="goalHome">58.0</span><span style="font-size:24px"> kg</span></div>
   </div>
-
   <div class="center">
     <input id="recordDate" class="date-picker" type="date" aria-label="記録日">
     <div class="big"><span id="weightHome">62.4</span><span style="font-size:24px"> kg</span></div>
@@ -62,7 +61,6 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
       <button id="plusBtn" class="btn">＋</button>
     </div>
   </div>
-
   <div class="card delta">
     <div class="label">目標まで</div>
     <b id="deltaText"></b>
@@ -73,7 +71,6 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
     <div id="bmiRating" class="small">設定で身長を入力してください</div>
   </div>
 </section>
-
 <section id="graph" class="hidden">
   <div class="tabs">
     <button class="tab active" data-range="day">日</button>
@@ -83,9 +80,8 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
   </div>
   <div id="chartPeriod" class="chart-period"></div>
   <div id="chartLegend" class="chart-legend"></div>
-  <svg id="chart" viewBox="0 0 360 260"></svg>
+  <svg id="chart" viewBox="0 0 360 400"></svg>
 </section>
-
 <section id="history" class="hidden">
   <div class="section-title">記録カレンダー</div>
   <div class="card">
@@ -98,35 +94,14 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
     <div id="historyCalendar" class="calendar-grid"></div>
   </div>
 </section>
-
 <section id="settings" class="hidden">
   <div class="section-title">設定</div>
   <div class="card">
-    <div class="setting">
-      <span>目標体重</span>
-      <div>
-        <button id="goalMinus" class="sbtn">−</button>
-        <strong style="margin:0 10px"><span id="goalSettings">58.0</span> kg</strong>
-        <button id="goalPlus" class="sbtn">＋</button>
-      </div>
-    </div>
-    <div class="setting">
-      <span>身長</span>
-      <div><input id="heightInput" type="number" min="100" max="250" step="0.1" placeholder="未設定"> cm</div>
-    </div>
-    <div class="setting">
-      <label for="genderInput">性別</label>
-      <select id="genderInput">
-        <option value="">未設定</option>
-        <option value="female">女性</option>
-        <option value="male">男性</option>
-        <option value="other">その他・回答しない</option>
-      </select>
-    </div>
+    <div class="setting"><span>目標体重</span><div><button id="goalMinus" class="sbtn">−</button><strong style="margin:0 10px"><span id="goalSettings">58.0</span> kg</strong><button id="goalPlus" class="sbtn">＋</button></div></div>
+    <div class="setting"><span>身長</span><div><input id="heightInput" type="number" min="100" max="250" step="0.1" placeholder="未設定"> cm</div></div>
+    <div class="setting"><label for="genderInput">性別</label><select id="genderInput"><option value="">未設定</option><option value="female">女性</option><option value="male">男性</option><option value="other">その他・回答しない</option></select></div>
   </div>
-  <div class="card">
-    <button id="openHelp" class="menu-link"><span>ヘルプ・使い方</span><span>›</span></button>
-  </div>
+  <div class="card"><button id="openHelp" class="menu-link"><span>ヘルプ・使い方</span><span>›</span></button></div>
   <div class="card">
     <div class="label">データ管理</div>
     <button id="exportData" class="secondary">データを保存</button>
@@ -139,63 +114,21 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
 </section>
 <section id="help" class="hidden">
   <button id="closeHelp" class="back">‹ 設定に戻る</button>
-  <div class="card help-card">
-    <h2>体重を記録する</h2>
-    <p>ホームの日付を選び、＋／−で体重を0.1kgずつ変更します。短く押すと0.1kg、長押しすると連続で変更できます。変更内容はその日付の記録として自動保存されます。</p>
-  </div>
-  <div class="card help-card">
-    <h2>BMIを確認する</h2>
-    <p>設定で身長を入力すると、選択日の体重からBMIと成人向けの評価を表示します。BMIの計算式は性別にかかわらず共通です。</p>
-  </div>
-  <div class="card help-card">
-    <h2>記録を確認・編集する</h2>
-    <p>「記録」のカレンダーで、体重が表示された日を押すと編集できます。空いている過去日を押すと、その日の入力画面へ移動します。</p>
-  </div>
-  <div class="card help-card">
-    <h2>グラフを見る</h2>
-    <p>「日・週・月・年」を切り替えて変化を確認できます。週表示の日付は、その週の日曜日です。</p>
-  </div>
-  <div class="card help-card">
-    <h2>機種変更・バックアップ</h2>
-    <ul>
-      <li>設定の「データを保存」でバックアップファイルを保存します。</li>
-      <li>新しい端末で「データを読み出し」を選び、そのファイルを読み込みます。</li>
-      <li>バックアップファイルはGoogleドライブなどに保管できます。</li>
-    </ul>
-  </div>
-  <div class="card help-card">
-    <h2>保存について</h2>
-    <p>通常の記録はこのブラウザ内に保存されます。ブラウザデータの削除や端末の故障に備え、定期的なバックアップ保存をおすすめします。</p>
-  </div>
-  <div class="card help-card">
-    <h2>データを削除する</h2>
-    <p>設定のクリア機能は、確認後にすべての体重記録を削除します。削除した記録は元に戻せません。</p>
-  </div>
+  <div class="card help-card"><h2>体重を記録する</h2><p>ホームの日付を選び、＋／−で体重を0.1kgずつ変更します。短く押すと0.1kg、長押しすると連続で変更できます。変更内容はその日付の記録として自動保存されます。</p></div>
+  <div class="card help-card"><h2>BMIを確認する</h2><p>設定で身長を入力すると、選択日の体重からBMIと成人向けの評価を表示します。BMIの計算式は性別にかかわらず共通です。</p></div>
+  <div class="card help-card"><h2>記録を確認・編集する</h2><p>「記録」のカレンダーで、体重が表示された日を押すと編集できます。空いている過去日を押すと、その日の入力画面へ移動します。</p></div>
+  <div class="card help-card"><h2>グラフを見る</h2><p>「日・週・月・年」を切り替えて変化を確認できます。週表示の日付は、その週の日曜日です。</p></div>
+  <div class="card help-card"><h2>機種変更・バックアップ</h2><ul><li>設定の「データを保存」でバックアップファイルを保存します。</li><li>新しい端末で「データを読み出し」を選び、そのファイルを読み込みます。</li><li>バックアップファイルはGoogleドライブなどに保管できます。</li></ul></div>
+  <div class="card help-card"><h2>保存について</h2><p>通常の記録はこのブラウザ内に保存されます。ブラウザデータの削除や端末の故障に備え、定期的なバックアップ保存をおすすめします。</p></div>
+  <div class="card help-card"><h2>データを削除する</h2><p>設定のクリア機能は、確認後にすべての体重記録を削除します。削除した記録は元に戻せません。</p></div>
 </section>
-
 <section id="edit" class="hidden">
   <div class="section-title">体重の編集</div>
-  <div class="card">
-    <div class="small" id="editDate"></div>
-    <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0">
-      <button id="editMinus" class="sbtn">−</button>
-      <input id="editWeight" type="number" step="0.1">
-      <button id="editPlus" class="sbtn">＋</button>
-    </div>
-    <button id="saveEdit" class="save">保存</button>
-    <button id="deleteEdit" class="danger">この記録を削除</button>
-  </div>
+  <div class="card"><div class="small" id="editDate"></div><div style="display:flex;justify-content:center;align-items:center;gap:12px;margin:22px 0"><button id="editMinus" class="sbtn">−</button><input id="editWeight" type="number" step="0.1"><button id="editPlus" class="sbtn">＋</button></div><button id="saveEdit" class="save">保存</button><button id="deleteEdit" class="danger">この記録を削除</button></div>
 </section>
 </main>
-
-<nav class="bottom">
-  <button class="nav active" data-page="home"><span class="ico">⌂</span>ホーム</button>
-  <button class="nav" data-page="graph"><span class="ico">▥</span>グラフ</button>
-  <button class="nav" data-page="history"><span class="ico">▤</span>記録</button>
-  <button class="nav" data-page="settings"><span class="ico">⚙︎</span>設定</button>
-</nav>
+<nav class="bottom"><button class="nav active" data-page="home"><span class="ico">⌂</span>ホーム</button><button class="nav" data-page="graph"><span class="ico">▥</span>グラフ</button><button class="nav" data-page="history"><span class="ico">▤</span>記録</button><button class="nav" data-page="settings"><span class="ico">⚙︎</span>設定</button></nav>
 </div>
-
 <script>
 (function(){
   const $ = id => document.getElementById(id);
@@ -204,383 +137,47 @@ svg{width:100%;height:280px;border:1px solid #eee;border-radius:16px;background:
   const pad=n=>String(n).padStart(2,'0');
   const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   const todayKey=keyOf(today);
-
-  function makeSeed(){
-    const records={};
-    const values=[63.4,63.0,62.8,62.6,62.3,62.1,62.4];
-    for(let i=6;i>=0;i--){
-      const d=new Date(today); d.setDate(d.getDate()-i);
-      records[keyOf(d)] = values[6-i];
-    }
-    return {goal:58.0,records};
-  }
-
-  let data;
-  try { data = JSON.parse(localStorage.getItem(KEY)) || makeSeed(); }
-  catch(e){ data = makeSeed(); }
+  function makeSeed(){const records={};const values=[63.4,63.0,62.8,62.6,62.3,62.1,62.4];for(let i=6;i>=0;i--){const d=new Date(today);d.setDate(d.getDate()-i);records[keyOf(d)] = values[6-i];}return {goal:58.0,records};}
+  let data;try { data = JSON.parse(localStorage.getItem(KEY)) || makeSeed(); }catch(e){ data = makeSeed(); }
   if(!data.profile || typeof data.profile!=='object') data.profile={height:null,gender:''};
-
-  let currentRange = 'day';
-  let selectedKey = todayKey;
-  let calendarMonth = new Date(today.getFullYear(),today.getMonth(),1);
-  let editingKey = null;
-
-  function save(){
-    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}
-  }
-
-  function currentWeight(){
-    const value=data.records[selectedKey];
-    return value==null ? null : Number(value);
-  }
-
+  let currentRange = 'day';let selectedKey = todayKey;let calendarMonth = new Date(today.getFullYear(),today.getMonth(),1);let editingKey = null;
+  function save(){try { localStorage.setItem(KEY, JSON.stringify(data)); } catch(e){}}
+  function currentWeight(){const value=data.records[selectedKey];return value==null ? null : Number(value);}
   function renderHome(){
-    const weight=currentWeight();
-    $('weightHome').textContent = weight==null ? '--' : weight.toFixed(1);
-    $('goalHome').textContent = Number(data.goal).toFixed(1);
-    $('goalSettings').textContent = Number(data.goal).toFixed(1);
-    $('recordDate').value=selectedKey;
-    $('recordDate').max=todayKey;
-    if(weight==null){
-      $('deltaText').textContent='選択日の体重を記録してください';
-    }else{
-      const diff = weight - data.goal;
-      $('deltaText').textContent = diff > 0 ? `あと ${diff.toFixed(1)} kg` : diff < 0 ? `目標より ${Math.abs(diff).toFixed(1)} kg 少ない` : '目標達成';
-    }
-    renderBMI(weight);
-    $('heightInput').value=data.profile.height ?? '';
-    $('genderInput').value=data.profile.gender ?? '';
+    const weight=currentWeight();$('weightHome').textContent = weight==null ? '--' : weight.toFixed(1);$('goalHome').textContent = Number(data.goal).toFixed(1);$('goalSettings').textContent = Number(data.goal).toFixed(1);$('recordDate').value=selectedKey;$('recordDate').max=todayKey;
+    if(weight==null){$('deltaText').textContent='選択日の体重を記録してください';}else{const diff = weight - data.goal;$('deltaText').textContent = diff > 0 ? `あと ${diff.toFixed(1)} kg` : diff < 0 ? `目標より ${Math.abs(diff).toFixed(1)} kg 少ない` : '目標達成';}
+    renderBMI(weight);$('heightInput').value=data.profile.height ?? '';$('genderInput').value=data.profile.gender ?? '';
   }
-
-  function renderBMI(weight){
-    const height=Number(data.profile.height);
-    if(weight==null || !Number.isFinite(height) || height<100 || height>250){
-      $('bmiValue').textContent='--';
-      $('bmiRating').className='small';
-      $('bmiRating').textContent=weight==null?'選択日の体重が未記録です':'設定で身長を入力してください';
-      return;
-    }
-    const bmi=weight/Math.pow(height/100,2);
-    const rating=bmi<18.5?'やせ':bmi<25?'普通':'肥満';
-    $('bmiValue').textContent=bmi.toFixed(1);
-    $('bmiRating').className='bmi-rating';
-    $('bmiRating').textContent=rating;
-  }
-
-  function changeToday(step){
-    const nearest=Object.keys(data.records)
-      .sort()
-      .filter(k=>k<=selectedKey)
-      .reverse()
-      .map(k=>Number(data.records[k]))
-      .find(Number.isFinite);
-    const fallback=Object.keys(data.records).sort().map(k=>Number(data.records[k])).find(Number.isFinite);
-    const base=currentWeight() ?? nearest ?? fallback ?? Number(data.goal);
-    const next = Math.round((base+step)*10)/10;
-    data.records[selectedKey] = Math.max(20, Math.min(300, next));
-    save();
-    renderHome();
-    renderHistory();
-    renderChart();
-    $('saveText').textContent='保存しました';
-    setTimeout(()=>{$('saveText').textContent='変更すると自動保存';},800);
-  }
-
-  function changeGoal(step){
-    data.goal = Math.max(20,Math.min(300,Math.round((Number(data.goal)+step)*10)/10));
-    save(); renderHome(); renderChart();
-  }
-
-  function showPage(page){
-    ['home','graph','history','settings','help','edit'].forEach(id=>$(id).classList.toggle('hidden',id!==page));
-    document.querySelectorAll('.nav').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===(page==='help'?'settings':page)));
-    $('headerTitle').textContent = page==='graph'?'グラフ':page==='history'?'記録':page==='settings'?'設定':page==='help'?'ヘルプ':page==='edit'?'体重の編集':'体重管理';
-    if(page==='history') renderHistory();
-    if(page==='graph') renderChart();
-  }
-
-  function renderHistory(){
-    const year=calendarMonth.getFullYear(), month=calendarMonth.getMonth();
-    $('calendarTitle').textContent=`${year}年${month+1}月`;
-    const currentMonth=new Date(today.getFullYear(),today.getMonth(),1);
-    $('nextMonth').disabled=calendarMonth>=currentMonth;
-    const firstDay=new Date(year,month,1).getDay();
-    const days=new Date(year,month+1,0).getDate();
-    const cells=Array(firstDay).fill('<div class="calendar-blank"></div>');
-    for(let day=1;day<=days;day++){
-      const d=new Date(year,month,day), key=keyOf(d);
-      const value=data.records[key];
-      const future=d>today;
-      const classes=['calendar-day',value!=null?'recorded':'',key===todayKey?'today':''].filter(Boolean).join(' ');
-      cells.push(`<button class="${classes}" data-date="${key}" ${future?'disabled':''}><span class="calendar-date">${day}</span>${value!=null?`<span class="calendar-weight">${Number(value).toFixed(1)}</span>`:''}</button>`);
-    }
-    $('historyCalendar').innerHTML=cells.join('');
-    document.querySelectorAll('[data-date]').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        const key=btn.dataset.date;
-        if(data.records[key]!=null) openEdit(key);
-        else { selectedKey=key; showPage('home'); }
-      });
-    });
-  }
-
-  function openEdit(k){
-    editingKey=k;
-    const d=new Date(k+'T00:00:00');
-    $('editDate').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;
-    $('editWeight').value=Number(data.records[k]).toFixed(1);
-    showPage('edit');
-  }
-
-  function adjustEdit(step){
-    $('editWeight').value=(Math.round((Number($('editWeight').value||0)+step)*10)/10).toFixed(1);
-  }
-
-  function saveEdit(){
-    if(!editingKey) return;
-    data.records[editingKey]=Math.round(Number($('editWeight').value)*10)/10;
-    save(); renderHome(); showPage('history');
-  }
-
-  function deleteEdit(){
-    if(!editingKey) return;
-    if(confirm('この記録を削除しますか？')){
-      delete data.records[editingKey];
-      save(); renderHome(); showPage('history');
-    }
-  }
-
-  function clearRecords(){
-    const confirmed=confirm('すべての体重記録を削除します。\nこの操作は元に戻せません。削除してもよろしいですか？');
-    if(!confirmed) return;
-    data.records={};
-    editingKey=null;
-    save();
-    renderHome();
-    renderHistory();
-    renderChart();
-  }
-
-  function exportData(){
-    const backup={
-      app:'weight-manager',
-      version:1,
-      exportedAt:new Date().toISOString(),
-      data
-    };
-    const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});
-    const url=URL.createObjectURL(blob);
-    const link=document.createElement('a');
-    link.href=url;
-    link.download=`weight-manager-backup-${todayKey}.json`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
-  }
-
-  function importDataFile(file){
-    if(!file) return;
-    const reader=new FileReader();
-    reader.onload=()=>{
-      try{
-        const backup=JSON.parse(reader.result);
-        const imported=backup?.data;
-        if(backup?.app!=='weight-manager' || !Number.isFinite(Number(imported?.goal)) || !imported?.records || typeof imported.records!=='object') throw new Error();
-        const records={};
-        Object.entries(imported.records).forEach(([key,value])=>{
-          if(/^\d{4}-\d{2}-\d{2}$/.test(key) && Number.isFinite(Number(value))) records[key]=Number(value);
-        });
-        if(!confirm(`バックアップの記録 ${Object.keys(records).length}件を読み込みます。\n現在のデータは上書きされます。続けますか？`)) return;
-        const height=Number(imported.profile?.height);
-        const gender=['female','male','other'].includes(imported.profile?.gender)?imported.profile.gender:'';
-        data={goal:Number(imported.goal),records,profile:{height:Number.isFinite(height)&&height>=100&&height<=250?height:null,gender}};
-        selectedKey=todayKey;
-        calendarMonth=new Date(today.getFullYear(),today.getMonth(),1);
-        editingKey=null;
-        save(); renderHome(); renderHistory(); renderChart(); showPage('home');
-        alert('データを復元しました。');
-      }catch(e){
-        alert('このファイルは読み込めません。体重管理アプリで書き出したJSONファイルを選んでください。');
-      }finally{
-        $('importFile').value='';
-      }
-    };
-    reader.readAsText(file);
-  }
-
-  function chartPoints(){
-    const source=Object.entries(data.records)
-      .map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)}))
-      .filter(x=>Number.isFinite(x.v) && x.d<=today)
-      .sort((a,b)=>a.d-b.d);
-
-    const ranges={
-      day:{count:14,label:'直近14日'},
-      week:{count:12,label:'直近12週間（週平均）'},
-      month:{count:12,label:'直近12か月（月平均）'},
-      year:{count:5,label:'直近5年間（年平均）'}
-    };
-    $('chartPeriod').textContent=ranges[currentRange].label;
-
-    const cutoff=new Date(today);
-    if(currentRange==='day') cutoff.setDate(cutoff.getDate()-(ranges.day.count-1));
-    if(currentRange==='week') cutoff.setDate(cutoff.getDate()-(ranges.week.count*7-1));
-    if(currentRange==='month') cutoff.setMonth(cutoff.getMonth()-(ranges.month.count-1),1);
-    if(currentRange==='year') cutoff.setFullYear(cutoff.getFullYear()-(ranges.year.count-1),0,1);
-
-    const filtered=source.filter(x=>x.d>=cutoff);
-    if(currentRange==='day'){
-      const points=filtered.map(x=>({ ...x, label:`${x.d.getMonth()+1}/${x.d.getDate()}` }));
-      return {points,actual:points,cutoff};
-    }
-
-    const groups=new Map();
-    filtered.forEach(item=>{
-      let groupDate,key,label;
-      if(currentRange==='week'){
-        groupDate=new Date(item.d);
-        const day=groupDate.getDay();
-        groupDate.setDate(groupDate.getDate()-day);
-        key=keyOf(groupDate);
-        label=`${groupDate.getMonth()+1}/${groupDate.getDate()}`;
-      }else if(currentRange==='month'){
-        groupDate=new Date(item.d.getFullYear(),item.d.getMonth(),1);
-        key=`${item.d.getFullYear()}-${pad(item.d.getMonth()+1)}`;
-        label=`${item.d.getMonth()+1}月`;
-      }else{
-        groupDate=new Date(item.d.getFullYear(),0,1);
-        key=String(item.d.getFullYear());
-        label=`${key}年`;
-      }
-      if(!groups.has(key)) groups.set(key,{d:groupDate,label,values:[],last:item});
-      const group=groups.get(key);
-      group.values.push(item.v);
-      group.last=item;
-    });
-    const grouped=[...groups.values()].sort((a,b)=>a.d-b.d);
-    const points=grouped.map(group=>({
-      d:group.d,
-      label:group.label,
-      v:group.values.reduce((sum,v)=>sum+v,0)/group.values.length
-    }));
-    const actual=grouped.map(group=>({d:group.last.d,v:group.last.v}));
-    return {points,actual,cutoff};
-  }
-
+  function renderBMI(weight){const height=Number(data.profile.height);if(weight==null || !Number.isFinite(height) || height<100 || height>250){$('bmiValue').textContent='--';$('bmiRating').className='small';$('bmiRating').textContent=weight==null?'選択日の体重が未記録です':'設定で身長を入力してください';return;}const bmi=weight/Math.pow(height/100,2);const rating=bmi<18.5?'やせ':bmi<25?'普通':'肥満';$('bmiValue').textContent=bmi.toFixed(1);$('bmiRating').className='bmi-rating';$('bmiRating').textContent=rating;}
+  function changeToday(step){const nearest=Object.keys(data.records).sort().filter(k=>k<=selectedKey).reverse().map(k=>Number(data.records[k])).find(Number.isFinite);const fallback=Object.keys(data.records).sort().map(k=>Number(data.records[k])).find(Number.isFinite);const base=currentWeight() ?? nearest ?? fallback ?? Number(data.goal);const next = Math.round((base+step)*10)/10;data.records[selectedKey] = Math.max(20, Math.min(300, next));save();renderHome();renderHistory();renderChart();$('saveText').textContent='保存しました';setTimeout(()=>{$('saveText').textContent='変更すると自動保存';},800);}
+  function changeGoal(step){data.goal = Math.max(20,Math.min(300,Math.round((Number(data.goal)+step)*10)/10));save(); renderHome(); renderChart();}
+  function showPage(page){['home','graph','history','settings','help','edit'].forEach(id=>$(id).classList.toggle('hidden',id!==page));document.querySelectorAll('.nav').forEach(btn=>btn.classList.toggle('active',btn.dataset.page===(page==='help'?'settings':page)));$('headerTitle').textContent = page==='graph'?'グラフ':page==='history'?'記録':page==='settings'?'設定':page==='help'?'ヘルプ':page==='edit'?'体重の編集':'体重管理';if(page==='history') renderHistory();if(page==='graph') renderChart();}
+  function renderHistory(){const year=calendarMonth.getFullYear(), month=calendarMonth.getMonth();$('calendarTitle').textContent=`${year}年${month+1}月`;const currentMonth=new Date(today.getFullYear(),today.getMonth(),1);$('nextMonth').disabled=calendarMonth>=currentMonth;const firstDay=new Date(year,month,1).getDay();const days=new Date(year,month+1,0).getDate();const cells=Array(firstDay).fill('<div class="calendar-blank"></div>');for(let day=1;day<=days;day++){const d=new Date(year,month,day), key=keyOf(d);const value=data.records[key];const future=d>today;const classes=['calendar-day',value!=null?'recorded':'',key===todayKey?'today':''].filter(Boolean).join(' ');cells.push(`<button class="${classes}" data-date="${key}" ${future?'disabled':''}><span class="calendar-date">${day}</span>${value!=null?`<span class="calendar-weight">${Number(value).toFixed(1)}</span>`:''}</button>`);} $('historyCalendar').innerHTML=cells.join('');document.querySelectorAll('[data-date]').forEach(btn=>{btn.addEventListener('click',()=>{const key=btn.dataset.date;if(data.records[key]!=null) openEdit(key);else { selectedKey=key; showPage('home'); }});});}
+  function openEdit(k){editingKey=k;const d=new Date(k+'T00:00:00');$('editDate').textContent=`${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日`;$('editWeight').value=Number(data.records[k]).toFixed(1);showPage('edit');}
+  function adjustEdit(step){$('editWeight').value=(Math.round((Number($('editWeight').value||0)+step)*10)/10).toFixed(1);}
+  function saveEdit(){if(!editingKey) return;data.records[editingKey]=Math.round(Number($('editWeight').value)*10)/10;save(); renderHome(); showPage('history');}
+  function deleteEdit(){if(!editingKey) return;if(confirm('この記録を削除しますか？')){delete data.records[editingKey];save(); renderHome(); showPage('history');}}
+  function clearRecords(){const confirmed=confirm('すべての体重記録を削除します。\nこの操作は元に戻せません。削除してもよろしいですか？');if(!confirmed) return;data.records={};editingKey=null;save();renderHome();renderHistory();renderChart();}
+  function exportData(){const backup={app:'weight-manager',version:1,exportedAt:new Date().toISOString(),data};const blob=new Blob([JSON.stringify(backup,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const link=document.createElement('a');link.href=url;link.download=`weight-manager-backup-${todayKey}.json`;document.body.appendChild(link);link.click();link.remove();URL.revokeObjectURL(url);}
+  function importDataFile(file){if(!file) return;const reader=new FileReader();reader.onload=()=>{try{const backup=JSON.parse(reader.result);const imported=backup?.data;if(backup?.app!=='weight-manager' || !Number.isFinite(Number(imported?.goal)) || !imported?.records || typeof imported.records!=='object') throw new Error();const records={};Object.entries(imported.records).forEach(([key,value])=>{if(/^\d{4}-\d{2}-\d{2}$/.test(key) && Number.isFinite(Number(value))) records[key]=Number(value);});if(!confirm(`バックアップの記録 ${Object.keys(records).length}件を読み込みます。\n現在のデータは上書きされます。続けますか？`)) return;const height=Number(imported.profile?.height);const gender=['female','male','other'].includes(imported.profile?.gender)?imported.profile.gender:'';data={goal:Number(imported.goal),records,profile:{height:Number.isFinite(height)&&height>=100&&height<=250?height:null,gender}};selectedKey=todayKey;calendarMonth=new Date(today.getFullYear(),today.getMonth(),1);editingKey=null;save(); renderHome(); renderHistory(); renderChart(); showPage('home');alert('データを復元しました。');}catch(e){alert('このファイルは読み込めません。体重管理アプリで書き出したJSONファイルを選んでください。');}finally{$('importFile').value='';}};reader.readAsText(file);}
+  function chartPoints(){const source=Object.entries(data.records).map(([k,v])=>({d:new Date(k+'T00:00:00'),v:Number(v)})).filter(x=>Number.isFinite(x.v) && x.d<=today).sort((a,b)=>a.d-b.d);const ranges={day:{count:14,label:'直近14日'},week:{count:12,label:'直近12週間（週平均）'},month:{count:12,label:'直近12か月（月平均）'},year:{count:5,label:'直近5年間（年平均）'}};$('chartPeriod').textContent=ranges[currentRange].label;const cutoff=new Date(today);if(currentRange==='day') cutoff.setDate(cutoff.getDate()-(ranges.day.count-1));if(currentRange==='week') cutoff.setDate(cutoff.getDate()-(ranges.week.count*7-1));if(currentRange==='month') cutoff.setMonth(cutoff.getMonth()-(ranges.month.count-1),1);if(currentRange==='year') cutoff.setFullYear(cutoff.getFullYear()-(ranges.year.count-1),0,1);const filtered=source.filter(x=>x.d>=cutoff);if(currentRange==='day'){const points=filtered.map(x=>({ ...x, label:`${x.d.getMonth()+1}/${x.d.getDate()}` }));return {points,actual:points,cutoff};}const groups=new Map();filtered.forEach(item=>{let groupDate,key,label;if(currentRange==='week'){groupDate=new Date(item.d);const day=groupDate.getDay();groupDate.setDate(groupDate.getDate()-day);key=keyOf(groupDate);label=`${groupDate.getMonth()+1}/${groupDate.getDate()}`;}else if(currentRange==='month'){groupDate=new Date(item.d.getFullYear(),item.d.getMonth(),1);key=`${item.d.getFullYear()}-${pad(item.d.getMonth()+1)}`;label=`${item.d.getMonth()+1}月`;}else{groupDate=new Date(item.d.getFullYear(),0,1);key=String(item.d.getFullYear());label=`${key}年`;}if(!groups.has(key)) groups.set(key,{d:groupDate,label,values:[],last:item});const group=groups.get(key);group.values.push(item.v);group.last=item;});const grouped=[...groups.values()].sort((a,b)=>a.d-b.d);const points=grouped.map(group=>({d:group.d,label:group.label,v:group.values.reduce((sum,v)=>sum+v,0)/group.values.length}));const actual=grouped.map(group=>({d:group.last.d,v:group.last.v}));return {points,actual,cutoff};}
   function renderChart(){
-    const svg=$('chart');
-    const chartData=chartPoints();
-    const pts=chartData.points, actual=chartData.actual;
-    $('chartLegend').innerHTML=currentRange==='day'
-      ? '<span><i class="legend-line legend-average"></i>実体重</span>'
-      : '<span><i class="legend-line legend-average"></i>平均</span><span><i class="legend-line legend-actual"></i>期間末の実体重</span>';
-    if(!pts.length){svg.innerHTML='<text x="180" y="130" text-anchor="middle">記録がありません</text>';return;}
-    const W=360,H=260,L=42,R=16,T=20,B=56;
-    const vals=actual.map(p=>p.v).concat(pts.map(p=>p.v),[Number(data.goal)]);
-    let min=Math.floor(Math.min(...vals)-1), max=Math.ceil(Math.max(...vals)+1);
-    if(max-min<4) max=min+4;
-    const span=Math.max(1,today-chartData.cutoff);
-    const xDate=d=>L+(W-L-R)*Math.max(0,Math.min(1,(d-chartData.cutoff)/span));
-    const y=v=>T+(H-T-B)*(max-v)/(max-min);
-    let out='';
-    for(let n=min;n<=max;n++){const yy=y(n);out+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#eef1f5"/><text x="${L-8}" y="${yy+4}" text-anchor="end" font-size="11" fill="#8892a5">${n}</text>`;}
-    pts.forEach(p=>out+=`<line x1="${xDate(p.d)}" x2="${xDate(p.d)}" y1="${T}" y2="${H-B}" stroke="#f4f5f8" stroke-width="1"/>`);
-    const gy=y(Number(data.goal));
-    out+=`<line x1="${L}" x2="${W-R}" y1="${gy}" y2="${gy}" stroke="#ff5f8d" stroke-dasharray="6 5"/><text x="${W-R}" y="${gy-6}" text-anchor="end" font-size="11" fill="#ff5f8d">目標 ${Number(data.goal).toFixed(1)}</text>`;
-    if(currentRange!=='day'){
-      out+=`<path d="${actual.map((p,i)=>`${i?'L':'M'} ${xDate(p.d)} ${y(p.v)}`).join(' ')}" fill="none" stroke="#aeb6c5" stroke-width="1.5"/>`;
-      actual.forEach(p=>out+=`<circle cx="${xDate(p.d)}" cy="${y(p.v)}" r="2.5" fill="#aeb6c5"/>`);
-    }
-    out+=`<path d="${pts.map((p,i)=>`${i?'L':'M'} ${xDate(p.d)} ${y(p.v)}`).join(' ')}" fill="none" stroke="#ff6b94" stroke-width="3"/>`;
-    pts.forEach(p=>out+=`<circle cx="${xDate(p.d)}" cy="${y(p.v)}" r="4" fill="#ff6b94"/>`);
-    pts.forEach(p=>{
-      const xx=xDate(p.d), yy=H-34;
-      out+=`<text x="${xx}" y="${yy}" text-anchor="end" font-size="9" fill="#8892a5" transform="rotate(-45 ${xx} ${yy})">${p.label}</text>`;
-    });
-    svg.innerHTML=out;
+    const svg=$('chart');const chartData=chartPoints();const pts=chartData.points, actual=chartData.actual;$('chartLegend').innerHTML=currentRange==='day'?'<span><i class="legend-line legend-average"></i>実体重</span>':'<span><i class="legend-line legend-average"></i>平均</span><span><i class="legend-line legend-actual"></i>期間末の実体重</span>';
+    if(!pts.length){svg.innerHTML='<text x="180" y="200" text-anchor="middle">記録がありません</text>';return;}
+    const W=360,H=400,L=50,R=16,T=38,B=72;const vals=actual.map(p=>p.v).concat(pts.map(p=>p.v),[Number(data.goal)]);let min=Math.floor(Math.min(...vals)-1), max=Math.ceil(Math.max(...vals)+1);if(max-min<4) max=min+4;const span=Math.max(1,today-chartData.cutoff);const xDate=d=>L+(W-L-R)*Math.max(0,Math.min(1,(d-chartData.cutoff)/span));const y=v=>T+(H-T-B)*(max-v)/(max-min);let out='<text x="10" y="20" font-size="12" font-weight="700" fill="#7b8599">kg</text>';
+    for(let n=min;n<=max;n++){const yy=y(n);out+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="#eef1f5"/><text x="${L-10}" y="${yy+4}" text-anchor="end" font-size="12" fill="#8892a5">${n}</text>`;}
+    pts.forEach(p=>out+=`<line x1="${xDate(p.d)}" x2="${xDate(p.d)}" y1="${T}" y2="${H-B}" stroke="#f4f5f8" stroke-width="1"/>`);const gy=y(Number(data.goal));out+=`<line x1="${L}" x2="${W-R}" y1="${gy}" y2="${gy}" stroke="#ff5f8d" stroke-dasharray="6 5"/><text x="${W-R}" y="${gy-8}" text-anchor="end" font-size="12" fill="#ff5f8d">目標 ${Number(data.goal).toFixed(1)}</text>`;
+    if(currentRange!=='day'){out+=`<path d="${actual.map((p,i)=>`${i?'L':'M'} ${xDate(p.d)} ${y(p.v)}`).join(' ')}" fill="none" stroke="#aeb6c5" stroke-width="1.5"/>`;actual.forEach(p=>out+=`<circle cx="${xDate(p.d)}" cy="${y(p.v)}" r="2.5" fill="#aeb6c5"/>`);}out+=`<path d="${pts.map((p,i)=>`${i?'L':'M'} ${xDate(p.d)} ${y(p.v)}`).join(' ')}" fill="none" stroke="#ff6b94" stroke-width="3"/>`;pts.forEach(p=>out+=`<circle cx="${xDate(p.d)}" cy="${y(p.v)}" r="4" fill="#ff6b94"/>`);pts.forEach(p=>{const xx=xDate(p.d), yy=H-42;out+=`<text x="${xx}" y="${yy}" text-anchor="end" font-size="10" fill="#8892a5" transform="rotate(-45 ${xx} ${yy})">${p.label}</text>`;});svg.innerHTML=out;
   }
-
-  function bindPressRepeat(id, action){
-    const btn=$(id);
-    let delayTimer=null;
-    let repeatTimer=null;
-    let suppressMouseUntil=0;
-    const stop=()=>{
-      if(delayTimer){clearTimeout(delayTimer);delayTimer=null;}
-      if(repeatTimer){clearInterval(repeatTimer);repeatTimer=null;}
-    };
-    const start=()=>{
-      stop();
-      action();
-      delayTimer=setTimeout(()=>{
-        repeatTimer=setInterval(action,130);
-      },400);
-    };
-    btn.addEventListener('touchstart',event=>{
-      event.preventDefault();
-      suppressMouseUntil=Date.now()+800;
-      start();
-    },{passive:false});
-    btn.addEventListener('touchend',event=>{
-      event.preventDefault();
-      stop();
-    },{passive:false});
-    btn.addEventListener('touchcancel',stop,{passive:true});
-    btn.addEventListener('mousedown',event=>{
-      if(Date.now()<suppressMouseUntil) return;
-      event.preventDefault();
-      start();
-    });
-    ['mouseup','mouseleave'].forEach(type=>btn.addEventListener(type,stop));
-    btn.addEventListener('click',event=>event.preventDefault());
-    btn.addEventListener('contextmenu',event=>event.preventDefault());
-  }
-
-  bindPressRepeat('minusBtn',()=>changeToday(-0.1));
-  bindPressRepeat('plusBtn',()=>changeToday(0.1));
-  bindPressRepeat('goalMinus',()=>changeGoal(-0.1));
-  bindPressRepeat('goalPlus',()=>changeGoal(0.1));
-  $('recordDate').addEventListener('change',event=>{
-    if(!event.target.value) return;
-    selectedKey=event.target.value>todayKey ? todayKey : event.target.value;
-    renderHome();
-  });
-  $('heightInput').addEventListener('change',event=>{
-    const height=Number(event.target.value);
-    data.profile.height=Number.isFinite(height)&&height>=100&&height<=250?height:null;
-    save(); renderHome();
-  });
-  $('genderInput').addEventListener('change',event=>{
-    data.profile.gender=event.target.value;
-    save();
-  });
-  $('editMinus').addEventListener('click',()=>adjustEdit(-0.1));
-  $('editPlus').addEventListener('click',()=>adjustEdit(0.1));
-  $('saveEdit').addEventListener('click',saveEdit);
-  $('deleteEdit').addEventListener('click',deleteEdit);
-  $('clearRecords').addEventListener('click',clearRecords);
-  $('openHelp').addEventListener('click',()=>showPage('help'));
-  $('closeHelp').addEventListener('click',()=>showPage('settings'));
-  $('exportData').addEventListener('click',exportData);
-  $('importData').addEventListener('click',()=>$('importFile').click());
-  $('importFile').addEventListener('change',event=>importDataFile(event.target.files[0]));
-  $('prevMonth').addEventListener('click',()=>{
-    calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);
-    renderHistory();
-  });
-  $('nextMonth').addEventListener('click',()=>{
-    const next=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);
-    const current=new Date(today.getFullYear(),today.getMonth(),1);
-    if(next<=current){ calendarMonth=next; renderHistory(); }
-  });
-  document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page)));
-  document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{
-    currentRange=btn.dataset.range;
-    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));
-    renderChart();
-  }));
-
+  function bindPressRepeat(id, action){const btn=$(id);let delayTimer=null;let repeatTimer=null;let suppressMouseUntil=0;const stop=()=>{if(delayTimer){clearTimeout(delayTimer);delayTimer=null;}if(repeatTimer){clearInterval(repeatTimer);repeatTimer=null;}};const start=()=>{stop();action();delayTimer=setTimeout(()=>{repeatTimer=setInterval(action,130);},400);};btn.addEventListener('touchstart',event=>{event.preventDefault();suppressMouseUntil=Date.now()+800;start();},{passive:false});btn.addEventListener('touchend',event=>{event.preventDefault();stop();},{passive:false});btn.addEventListener('touchcancel',stop,{passive:true});btn.addEventListener('mousedown',event=>{if(Date.now()<suppressMouseUntil) return;event.preventDefault();start();});['mouseup','mouseleave'].forEach(type=>btn.addEventListener(type,stop));btn.addEventListener('click',event=>event.preventDefault());btn.addEventListener('contextmenu',event=>event.preventDefault());}
+  bindPressRepeat('minusBtn',()=>changeToday(-0.1));bindPressRepeat('plusBtn',()=>changeToday(0.1));bindPressRepeat('goalMinus',()=>changeGoal(-0.1));bindPressRepeat('goalPlus',()=>changeGoal(0.1));
+  $('recordDate').addEventListener('change',event=>{if(!event.target.value) return;selectedKey=event.target.value>todayKey ? todayKey : event.target.value;renderHome();});
+  $('heightInput').addEventListener('change',event=>{const height=Number(event.target.value);data.profile.height=Number.isFinite(height)&&height>=100&&height<=250?height:null;save(); renderHome();});
+  $('genderInput').addEventListener('change',event=>{data.profile.gender=event.target.value;save();});
+  $('editMinus').addEventListener('click',()=>adjustEdit(-0.1));$('editPlus').addEventListener('click',()=>adjustEdit(0.1));$('saveEdit').addEventListener('click',saveEdit);$('deleteEdit').addEventListener('click',deleteEdit);$('clearRecords').addEventListener('click',clearRecords);$('openHelp').addEventListener('click',()=>showPage('help'));$('closeHelp').addEventListener('click',()=>showPage('settings'));$('exportData').addEventListener('click',exportData);$('importData').addEventListener('click',()=>$('importFile').click());$('importFile').addEventListener('change',event=>importDataFile(event.target.files[0]));
+  $('prevMonth').addEventListener('click',()=>{calendarMonth=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()-1,1);renderHistory();});
+  $('nextMonth').addEventListener('click',()=>{const next=new Date(calendarMonth.getFullYear(),calendarMonth.getMonth()+1,1);const current=new Date(today.getFullYear(),today.getMonth(),1);if(next<=current){ calendarMonth=next; renderHistory(); }});
+  document.querySelectorAll('.nav').forEach(btn=>btn.addEventListener('click',()=>showPage(btn.dataset.page)));document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{currentRange=btn.dataset.range;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===btn));renderChart();}));
   save(); renderHome(); renderHistory(); renderChart();
 })();
 </script>
